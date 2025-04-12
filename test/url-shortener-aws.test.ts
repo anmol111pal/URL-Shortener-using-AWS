@@ -1,17 +1,29 @@
-// import * as cdk from 'aws-cdk-lib';
-// import { Template } from 'aws-cdk-lib/assertions';
-// import * as UrlShortenerAws from '../lib/url-shortener-aws-stack';
+import * as cdk from 'aws-cdk-lib';
+import { Template } from 'aws-cdk-lib/assertions';
+import * as UrlShortenerAws from '../lib/url-shortener-aws-stack';
 
-// example test. To run these tests, uncomment this file along with the
-// example resource in lib/url-shortener-aws-stack.ts
-test('SQS Queue Created', () => {
-//   const app = new cdk.App();
-//     // WHEN
-//   const stack = new UrlShortenerAws.UrlShortenerAwsStack(app, 'MyTestStack');
-//     // THEN
-//   const template = Template.fromStack(stack);
+describe('Test resource creation', () => {
+    let template: Template;
 
-//   template.hasResourceProperties('AWS::SQS::Queue', {
-//     VisibilityTimeout: 300
-//   });
+    beforeEach(() => {
+        const app = new cdk.App();
+        const stack = new UrlShortenerAws.UrlShortenerAwsStack(app, 'MyTestStack');
+        template = Template.fromStack(stack);
+    });
+    
+    test('API gateway Created', () => {
+        template.hasResource('AWS::ApiGateway::RestApi', {});
+    });
+
+    test('Shorten URL Lambda Created', () => {
+        template.hasResource('AWS::Lambda::Function', {});
+    });
+
+    test('Redirect URL Lambda Created', () => {
+        template.hasResource('AWS::Lambda::Function', {});
+    });
+
+    test('Dynamo DB Table Created', () => {
+        template.hasResource('AWS::DynamoDB::Table', {});
+    });
 });
