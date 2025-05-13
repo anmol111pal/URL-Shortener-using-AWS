@@ -21,7 +21,7 @@ export class UrlShortenerAwsStack extends cdk.Stack {
         type: AttributeType.STRING,
       },
       sortKey: {
-        name: 'timestamp',
+        name: 'createdAt',
         type: AttributeType.STRING,
       },
       billingMode: BillingMode.PAY_PER_REQUEST,

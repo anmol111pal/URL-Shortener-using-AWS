@@ -32,7 +32,8 @@ export const handler = async (event: any) => {
             clicks: 0,
             url,
             shortUrl,
-            timestamp: new Date().toISOString()
+            createdAt: new Date().toISOString(),
+            timestamps: [],
         };
         
         const putCommand = new PutCommand({
@@ -47,8 +48,9 @@ export const handler = async (event: any) => {
         return {
             statusCode: 200,
             body: JSON.stringify({
-                message: 'Item added successfully',
-                item
+                shortUrl,
+                url,
+                message: 'URL shortened successfully',
             }),
             headers: {
                 'Content-Type': 'application/json'

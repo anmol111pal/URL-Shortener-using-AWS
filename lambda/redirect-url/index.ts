@@ -14,6 +14,8 @@ export const handler = async (event: any) => {
         const shortUrl: string = event.pathParameters?.url;
         console.log('URL received: ', shortUrl);
 
+        const currentTime: string = new Date().toISOString();
+
         const params = {
             TableName: tableName,
             KeyConditionExpression: 'shortUrl = :shortUrl',
@@ -30,25 +32,28 @@ export const handler = async (event: any) => {
 
         const url: string = doc?.url;
         const clicks: number = doc?.clicks;
-        const timestamp: string = doc?.timestamp;
+        const createdAt: string = doc?.createdAt;
 
         console.log('Redirecting to ', url);
 
         const updateParams = {
             TableName: tableName,
             Key: {
-                shortUrl: shortUrl,
-                timestamp: timestamp,
+                shortUrl,
+                createdAt,
             },
-            UpdateExpression: 'set #clicks = :clicks + :newVal',
+            UpdateExpression: 'set #clicks = :clicks + :newVal, #timestamps = list_append(if_not_exists(timestamps, :empty_list), :currentTime)',
             ExpressionAttributeNames: {
                 '#clicks': 'clicks',
+                '#timestamps': 'timestamps',
             },
             ExpressionAttributeValues: {
                 ':clicks': clicks,
                 ':newVal': 1,
+                ':currentTime': [currentTime],
+                ':empty_list': [],
             },
-            ReturnValues: 'UPDATED_NEW' as 'UPDATED_NEW'
+            ReturnValues: 'UPDATED_NEW' as 'UPDATED_NEW',
         };
 
         const updateCommand = new UpdateCommand(updateParams);
