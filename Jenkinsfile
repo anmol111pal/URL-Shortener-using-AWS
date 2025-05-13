@@ -1,10 +1,14 @@
 pipeline {
     agent any
 
+    options {
+        skipDefaultCheckout()
+    }
+
     stages {
         stage('Code Checkout') {
             steps {
-                git 'https://github.com/anmol111pal/URL-Shortener-using-AWS.git'
+                checkout scm
             }
         }
 
